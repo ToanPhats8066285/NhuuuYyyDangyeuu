@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hết giận chưaa?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap&subset=vietnamese" rel="stylesheet">
+<style>
+:root{
+  --night:#1d1433; --dusk:#3b2357; --plum:#4b1a61; --rose:#c86a8f; --peach:#f3a59c;
+  --cream:#fff4e0; --butter:#ffe08a; --heart:#fe1239; --ground:#2a173c;
+  --s:1; --w:800px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{
+  min-height:100svh; overflow-x:hidden; color:var(--cream);
+  font-family:"Lora",Georgia,"Times New Roman",serif;
+  background:linear-gradient(to bottom,var(--night) 0%,var(--dusk) 42%,#7d4677 72%,var(--peach) 100%);
+  background-attachment:fixed;
+  display:flex; flex-direction:column;
+  padding-top:env(safe-area-inset-top,0px);
+}
+
+/* ---------- Bầu trời ---------- */
+.sky{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.star{position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;opacity:.7;animation:twinkle var(--t,4s) ease-in-out infinite;animation-delay:var(--d,0s)}
+.moon{position:absolute;top:8vh;right:9vw;width:clamp(56px,9vw,96px);aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#fffbea,#ffe9b8 60%,#f6d58f);
+  box-shadow:0 0 40px 10px rgba(255,233,184,.25),0 0 120px 40px rgba(255,200,170,.12)}
+.moon::after{content:"";position:absolute;width:22%;height:22%;border-radius:50%;background:rgba(214,180,120,.35);top:52%;left:24%;box-shadow:28px -18px 0 -3px rgba(214,180,120,.3)}
+@keyframes twinkle{0%,100%{opacity:.15}50%{opacity:.9}}
+
+/* ---------- Phần chữ ---------- */
+.hero{position:relative;z-index:2;text-align:center;padding:clamp(2.5rem,9vh,6rem) 1.25rem 1rem;max-width:44rem;margin:auto}
+.hero h1{font-family:"Dancing Script",cursive;font-weight:700;font-size:clamp(3.2rem,11vw,6.8rem);line-height:1;
+  color:var(--cream);text-shadow:0 0 24px rgba(255,170,190,.45),0 4px 0 rgba(75,26,97,.6);
+  animation:rise 1.4s cubic-bezier(.2,.8,.2,1) .2s both}
+.hero p{margin-top:1rem;font-style:italic;font-size:clamp(1rem,2.6vw,1.2rem);line-height:1.7;color:#f6dce6;min-height:1.7em;transition:opacity .3s}
+.actions{margin-top:1.6rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;min-height:3.2rem}
+.btn{font:500 1.05rem/1 "Lora",serif;padding:.95rem 1.8rem;border-radius:999px;cursor:pointer;border:2px solid transparent;transition:transform .2s,background .2s,box-shadow .2s}
+.btn:focus-visible{outline:3px solid var(--butter);outline-offset:3px}
+.btn-yes{background:var(--butter);color:var(--plum);box-shadow:0 4px 0 #c9a23e,0 10px 30px rgba(255,224,138,.25)}
+.btn-yes:hover{transform:translateY(-2px)}
+.btn-yes:active{transform:translateY(2px);box-shadow:0 2px 0 #c9a23e}
+.btn-no{background:transparent;color:var(--cream);border-color:rgba(255,244,224,.55)}
+.btn-no.runaway{position:fixed;z-index:20;transition:left .35s cubic-bezier(.3,1.4,.5,1),top .35s cubic-bezier(.3,1.4,.5,1)}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+
+/* ---------- Sân khấu (tự co giãn theo màn hình) ---------- */
+.scene{position:relative;z-index:1;flex-shrink:0;width:100%;height:calc(380px * var(--s));overflow:hidden}
+.stage{position:absolute;left:0;bottom:0;width:var(--w);height:380px;transform:scale(var(--s));transform-origin:bottom left}
+.hills{position:absolute;left:0;bottom:6px;width:100%;height:170px}
+.ground{position:relative;z-index:1;height:calc(clamp(36px,9vh,80px) + env(safe-area-inset-bottom,0px));background:linear-gradient(var(--ground),#1a0f27)}
+
+.ground-line{position:absolute;left:0;bottom:0;width:100%;height:6px;z-index:3;
+  background:repeating-linear-gradient(90deg,#ffcf9f 0 80px,transparent 80px 100px,#ffcf9f 100px 680px,transparent 680px 700px,#ffcf9f 700px 780px,transparent 780px 800px);
+  animation:roadLine 3s linear infinite}
+@keyframes roadLine{from{background-position-x:0}to{background-position-x:-800px}}
+
+/* Cây */
+.tree{position:absolute;left:0;bottom:6px;z-index:2;animation:tree 7s linear infinite}
+.tree.t2{animation-delay:-2.6s;transform-origin:bottom}
+.tree.t3{animation-delay:-5s}
+.tree .stem{width:6px;height:100px;border-radius:6px 6px 0 0;background:var(--plum);position:relative}
+.tree .branch{width:4px;border-radius:4px;background:var(--plum);position:absolute;z-index:10}
+.tree .branch1{bottom:25px;height:30px;left:10px;transform:rotate(45deg)}
+.tree .branch2{bottom:40px;height:20px;right:8px;transform:rotate(-45deg)}
+.tree .branch3{bottom:60px;height:15px;left:5px;transform:rotate(45deg)}
+.tree .leef{z-index:-1;border-radius:50%;position:absolute;background:#9bd66a;border:solid 4px var(--plum)}
+.tree .leef1{width:48px;height:48px;top:-15px;left:-22px}
+.tree .leef2{width:68px;height:68px;top:18px;left:-32px}
+.tree .leef2::after{content:"";width:50%;height:50%;position:absolute;background:#9bd66a;z-index:9;left:25%;border-radius:50%;top:-18px}
+@keyframes tree{from{transform:translateX(calc(var(--w) + 60px))}to{transform:translateX(-120px)}}
+
+/* ---------- Chiếc xe (giữ thiết kế gốc, gọn lại) ---------- */
+.vehicle-body{width:500px;height:220px;position:absolute;left:calc(50% - 250px);bottom:33px;z-index:9;
+  animation:driveIn 2.6s cubic-bezier(.15,.75,.25,1) both}
+.vehicle-body.hop .wrap-body{animation:hop .5s ease 2}
+@keyframes driveIn{from{transform:translateX(calc(-1 * var(--w)))}to{transform:none}}
+@keyframes hop{0%,100%{top:0}40%{top:-14px}}
+.wrap-body{position:absolute;inset:0;animation:body 3s ease infinite}
+.body-cover{position:absolute;inset:0;border:solid 5px var(--plum);background:#c6edff;overflow:hidden;border-radius:15px 60px 0 15px}
+.top-roof{position:absolute;left:0;top:0;background:#ffe400;border-bottom:solid 4px var(--plum);width:100%;height:14px}
+.rooftop{background:#fa7775;border:solid 4px var(--plum);border-bottom:none;bottom:100%;overflow:hidden;position:absolute}
+.rooftop::after{content:"";position:absolute;left:0;bottom:0;width:100%;background:#f96461;height:50%}
+.rooftop.back{width:60px;left:20%;height:15px;border-radius:4px 4px 0 0}
+.rooftop.front{width:80px;left:40%;height:25px;border-radius:4px 20px 0 0}
+.side-guard{background:#fa7775;border-top:solid 4px var(--plum);bottom:4px;position:absolute;left:4px;width:calc(100% - 8px);height:50px;border-radius:0 0 0 10px}
+.side-guard .shade{position:absolute;left:0;bottom:0;width:100%;height:40%;border-radius:0 0 0 15px;background:#f96461}
+.side-guard .bumper{position:absolute;border:solid 4px var(--plum);height:18px;background:#a6a6a6;border-radius:4px}
+.side-guard .bumper.front{right:-12px;width:22px;height:22px;bottom:-10px}
+.side-guard .bumper.back{width:29px;top:11px;left:-15px;box-shadow:0 3px 0 rgba(0,0,0,.15)}
+.side-guard .front-indicator{width:26px;height:11px;box-shadow:0 3px 0 #f96461;position:absolute;border:solid 3px var(--plum);right:10px;background:#ffe400;top:5px}
+.indi{width:24px;height:10px;box-shadow:0 3px 0 #a7e3ff;position:absolute;border:solid 3px var(--plum);left:10px;background:#ffa700}
+.indi.back-top-indicator{top:24px}
+.indi.back-bottom-indicator{bottom:60px}
+.back-window{height:53%;top:14%;left:50px;width:190px;position:absolute}
+.window-base{width:100%;height:12px;background:#abec39;border-radius:10px;border:solid 3px var(--plum);box-shadow:0 3px 0 rgba(0,0,0,.15);position:relative;z-index:1}
+.back-window .window-base.bottom{bottom:0;position:absolute;left:0}
+.sun-shade{background:#fa7775;border:solid 4px var(--plum);border-top:none;width:90%;margin-left:4.5%;height:23px;position:relative;z-index:0}
+.curtain{position:relative;width:90%;margin-left:5%;font-size:0;z-index:2}
+.curtain span{height:15px;border-radius:0 0 15px 15px;display:inline-block;background:#fa7775;border:solid 4px var(--plum);border-top:none;box-shadow:0 3px 0 rgba(0,0,0,.15);margin-left:-4px}
+.curtain span:nth-child(even){background:#fff}
+.back-window .curtain span{width:calc(100%/8);animation:curtain .5s linear infinite}
+.back-window .curtain span+span{width:calc((100%/8) + 2px)}
+.back-window .windows-glass-wrap{background:#f5f4f1;border-left:solid 4px var(--plum);border-right:solid 4px var(--plum);height:60px;width:80%;margin-left:9%;margin-top:-10px;padding:2px 5px;font-size:0}
+.back-window .glass{background:#7ad5ff;overflow:hidden;border:solid 3px var(--plum);border-radius:6px;width:46%;height:100%;margin-top:-3px;display:inline-block;position:relative}
+.back-window .glass::after{content:"";position:absolute;background:rgba(71,197,255,.5);width:100%;border-radius:0 0 10px 10px;height:60%;top:0;left:0}
+.back-window .glass+.glass{margin-left:4%}
+.light{position:absolute;height:100%;top:-7px;opacity:.5;transform:rotate(115deg);animation:glare 2s linear infinite}
+.light span{width:100%;display:block;margin-bottom:2px;background:#fff}
+.light .light1{height:10px}.light .light2{height:3px}.light .light3{height:6px}
+.back-window .light{width:130%}
+/* Hai người ngồi trong xe */
+.passenger{position:absolute;bottom:0;left:50%;width:26px;height:30px;margin-left:-13px;z-index:1}
+.passenger::before{content:"";position:absolute;left:3px;top:0;width:20px;height:20px;border-radius:50%;background:#ffd7b5;border:3px solid var(--plum)}
+.passenger::after{content:"";position:absolute;left:0;bottom:-6px;width:26px;height:14px;border-radius:12px 12px 0 0;background:var(--rose);border:3px solid var(--plum)}
+.main-door{position:absolute;right:120px;bottom:0;border:solid 4px var(--plum);border-radius:10px 10px 0 0;width:80px;height:80%;z-index:9;background:#f5f4f1;text-align:center}
+.main-door::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:11%;background:#eae8e2}
+.main-door .glass{background:#60cdff;border:solid 3px var(--plum);border-radius:10px;width:85%;height:60px;margin-top:5px;display:inline-block;overflow:hidden;position:relative}
+.main-door .glass::after{content:"";position:absolute;background:rgba(255,255,255,.3);width:100%;border-radius:12px 12px 10px 10px;height:60%;bottom:0;left:0}
+.main-door .door-handle{background:#fa7775;border:solid .2em var(--plum);width:10px;height:22px;position:absolute;right:5px;bottom:40%;border-radius:20px}
+.front-window{top:14%;right:20px;width:70px;height:60%;position:absolute}
+.front-window .window-base{height:10px}
+.front-window .curtain{margin-left:6%}
+.front-window .curtain span{width:calc(100%/3)}
+.front-window .curtain span+span{width:calc((100%/3) + 2px)}
+.front-window .windows-glass-wrap{height:40px;width:80%;margin-left:9%;margin-top:-10px;border:solid 4px var(--plum);border-top:none;background:#7ad5ff;border-radius:0 0 10px 10px;overflow:hidden;position:relative}
+.front-window .light{width:120%;opacity:.4;animation-duration:1.5s}
+.air-hole{position:absolute;width:100%;bottom:5px}
+.air-hole span{width:30px;height:5px;background:#f5f4f1;display:block;margin:1px auto 0;border-radius:20px;border:solid .15em var(--plum)}
+.wheel-wrap{width:80px;height:80px;position:absolute;z-index:9;bottom:-40px}
+.wheel-wrap.back{left:80px}.wheel-wrap.front{right:70px}
+.wheel-shadow{width:100%;height:100%;display:block;border-top:solid 40px var(--plum);border-radius:50%;position:relative;animation:body 3s ease infinite}
+.wheel{width:76%;height:76%;left:12%;top:12%;position:absolute;text-align:center;font-size:0;border-radius:50%}
+.wheel::after{content:"";top:1px;left:2px;height:100%;position:absolute;width:calc(100% - 4px);box-shadow:inset 0 7px 0 #747474;border-radius:50%;z-index:9}
+.wheel-outer{position:absolute;inset:0;background:#a6a6a6;border:solid 3px var(--plum);border-radius:50%;animation:wheel .4s linear infinite}
+.wheel-outer::after{content:"";position:absolute;width:10px;height:5px;background:#b8b8b8;top:5px;left:16px;border-radius:50%}
+.wheel-cup{width:60%;height:60%;margin-top:20%;display:inline-block;position:relative;background:#60cdff;border:solid 3px #3b154d;border-radius:50%;transform:rotate(45deg);padding:5px 4px}
+.wheel-cup span{display:inline-block;width:6px;height:6px;margin:1px;background:#a6a6a6;border-radius:50%;border:solid 1px #3b154d}
+.headlight{position:absolute;right:-150px;bottom:30px;width:160px;height:60px;z-index:8;pointer-events:none;
+  background:radial-gradient(ellipse at left,rgba(255,236,170,.55),rgba(255,236,170,0) 70%);clip-path:polygon(0 40%,100% 0,100% 100%,0 60%)}
+@keyframes wheel{to{transform:rotate(360deg)}}
+@keyframes body{0%,20%,40%,45%,60%,80%,100%{top:0}70%{top:3px}30%,90%{top:6px}}
+@keyframes glare{from{left:100%}to{left:-100%}}
+@keyframes curtain{0%,100%{transform:rotate(0)}50%{transform:rotate(4deg)}}
+
+/* ---------- Trái tim ---------- */
+.heart{position:absolute;z-index:7;pointer-events:none;opacity:0;animation:floatUp var(--dur,4s) ease-out forwards}
+.love{width:34px;height:34px;position:relative;display:block;transform:rotate(45deg)}
+.love span{position:absolute;width:24px;height:24px;background:var(--c,var(--heart))}
+.love .c1{left:0;bottom:0;border-radius:50%}
+.love .c2{right:0;top:0;border-radius:50%}
+.love .sq{right:0;bottom:0}
+@keyframes floatUp{
+  0%{opacity:0;transform:translate(0,0) scale(.3)}
+  15%{opacity:1}
+  100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(var(--sc)) rotate(var(--rot))}
+}
+
+/* ---------- Lá thư ---------- */
+dialog{border:none;padding:0;background:transparent;max-width:min(36rem,calc(100vw - 2rem));width:100%;margin:auto;color:#3b1d4f}
+dialog::backdrop{background:rgba(20,10,35,.65);backdrop-filter:blur(3px)}
+.letter{position:relative;background:#fff8ec;border-radius:6px 6px 22px 6px;padding:clamp(1.6rem,5vw,2.6rem);
+  box-shadow:0 30px 60px rgba(0,0,0,.4);max-height:calc(100svh - 3rem);overflow-y:auto;
+  border-top:6px solid var(--rose)}
+dialog[open] .letter{animation:unfold .7s cubic-bezier(.2,.8,.2,1)}
+@keyframes unfold{from{opacity:0;transform:translateY(30px) rotate(-2deg) scale(.96)}to{opacity:1;transform:none}}
+.letter .to{font-family:"Dancing Script",cursive;font-size:2rem;color:var(--plum);margin-bottom:.6rem}
+.letter p{font-size:1.04rem;line-height:1.85;margin-bottom:.9rem}
+.poem{margin:1.3rem 0 1.4rem;padding-left:1.1rem;border-left:3px solid var(--rose);font-style:italic}
+.poem span{display:block;line-height:1.85}
+.poem span:nth-child(even){padding-left:1.4rem}
+@media (max-width:480px){.poem{padding-left:.8rem;font-size:.95rem}.poem span:nth-child(even){padding-left:.8rem}}
+.reveal{opacity:0;transform:translateY(8px);transition:opacity .7s ease,transform .7s ease;transition-delay:calc(var(--i) * 260ms)}
+dialog.show .reveal{opacity:1;transform:none}
+.sign{font-family:"Dancing Script",cursive;font-size:1.5rem;text-align:right;color:var(--rose);margin-top:.4rem}
+.close{display:block;margin:1.4rem 0 0 auto;font:500 .95rem "Lora",serif;color:var(--plum);background:none;border:2px solid var(--plum);border-radius:999px;padding:.6rem 1.3rem;cursor:pointer}
+.close:focus-visible{outline:3px solid var(--rose);outline-offset:3px}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+</style>
+</head>
+<body>
+
+<div class="sky" aria-hidden="true"><div class="moon"></div></div>
+
+<main class="hero">
+  <h1 id="title">Hết giận chưaa?</h1>
+  <p id="sub">Chiếc xe nhỏ này chở đầy lời xin lỗi tới cho em nè.</p>
+  <div class="actions" id="actions">
+    <button class="btn btn-yes" id="yes">Hết rồi</button>
+    <button class="btn btn-no" id="no">Chưa</button>
+  </div>
+</main>
+
+<div class="scene" id="scene" aria-hidden="true">
+  <div class="stage" id="stage">
+    <svg class="hills" viewBox="0 0 1600 170" preserveAspectRatio="none">
+      <path d="M0 120 C180 40 320 60 480 100 S760 30 980 90 1280 40 1600 100 V170 H0Z" fill="#4a2a63" opacity=".55"/>
+      <path d="M0 150 C220 90 380 120 560 135 S900 80 1120 130 1420 100 1600 140 V170 H0Z" fill="#33204a"/>
+    </svg>
+
+    <div class="ground-line"></div>
+
+    <div class="tree t1"><div class="stem"><div class="branch branch1"></div><div class="branch branch2"></div><div class="branch branch3"></div></div><div class="leef leef1"></div><div class="leef leef2"></div></div>
+    <div class="tree t2"><div class="stem"><div class="branch branch1"></div><div class="branch branch2"></div><div class="branch branch3"></div></div><div class="leef leef1"></div><div class="leef leef2"></div></div>
+    <div class="tree t3"><div class="stem"><div class="branch branch1"></div><div class="branch branch2"></div><div class="branch branch3"></div></div><div class="leef leef1"></div><div class="leef leef2"></div></div>
+
+    <div class="vehicle-body" id="van">
+      <div class="headlight"></div>
+      <div class="wrap-body">
+        <div class="rooftop back"></div>
+        <div class="rooftop front"></div>
+        <div class="body-cover">
+          <div class="top-roof"></div>
+          <div class="indi back-top-indicator"></div>
+          <div class="indi back-bottom-indicator"></div>
+          <div class="back-window">
+            <div class="window-base top"></div>
+            <div class="window-base bottom"></div>
+            <div class="sun-shade"></div>
+            <div class="curtain"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            <div class="windows-glass-wrap">
+              <div class="glass"><div class="passenger"></div><div class="light"><span class="light1"></span><span class="light2"></span><span class="light3"></span></div></div>
+              <div class="glass"><div class="light"><span class="light1"></span><span class="light2"></span><span class="light3"></span></div></div>
+            </div>
+          </div>
+          <div class="front-window">
+            <div class="window-base"></div>
+            <div class="sun-shade"></div>
+            <div class="curtain"><span></span><span></span><span></span></div>
+            <div class="windows-glass-wrap"><div class="light"><span class="light1"></span><span class="light2"></span><span class="light3"></span></div></div>
+            <div class="air-hole"><span></span><span></span><span></span><span></span><span></span></div>
+          </div>
+        </div>
+        <div class="main-door">
+          <div class="glass"><div class="light"><span class="light1"></span><span class="light2"></span></div></div>
+          <div class="door-handle"></div>
+        </div>
+        <div class="side-guard">
+          <div class="shade"></div>
+          <div class="bumper back"></div>
+          <div class="bumper front"></div>
+          <div class="front-indicator"></div>
+        </div>
+      </div>
+      <div class="wheel-wrap back"><div class="wheel-shadow"></div><div class="wheel"><div class="wheel-outer"><div class="wheel-cup"><span></span><span></span><span></span><span></span></div></div></div></div>
+      <div class="wheel-wrap front"><div class="wheel-shadow"></div><div class="wheel"><div class="wheel-outer"><div class="wheel-cup"><span></span><span></span><span></span><span></span></div></div></div></div>
+    </div>
+  </div>
+</div>
+<div class="ground" aria-hidden="true"></div>
+
+<dialog id="letter" aria-labelledby="letterTo">
+  <div class="letter" id="letterBody"></div>
+</dialog>
+
+<script>
+/* ===== Sửa nội dung thư ở đây ===== */
+const CONFIG = {
+  to: "Gửi em,",
+  intro: [
+    "Hôm nay anh lỡ nói vài câu chẳng đâu vào đâu, để em buồn suốt cả buổi chiều.",
+    "Anh không khéo nói lời xin lỗi, nên anh viết thành mấy câu thơ, chất lên chiếc xe nhỏ này rồi chạy tới chỗ em."
+  ],
+  poem: [
+    "Chiều nay trời cũng biết hờn,",
+    "mây giăng một dải, gió vờn ngang sân.",
+    "Anh ngồi đếm mãi bao lần",
+    "lỡ lời để mắt em gần rưng rưng.",
+    "Lời xin lỗi cứ ngập ngừng,",
+    "nên anh chất cả lên lưng xe này.",
+    "Chở qua phố, chở qua mây,",
+    "chở tim anh tới tận tay em cầm.",
+    "Mai này dẫu nắng hay râm,",
+    "anh vẫn là kẻ âm thầm thương em."
+  ],
+  outro: "Hết giận rồi thì cười với anh một cái nha.",
+  signature: "Người lỡ làm em giận, và thương em nhất",
+  afterTitle: "Thương em nhiều lắm",
+  afterSub: "Có một lá thư nhỏ cho em nè.",
+  noLines: [
+    "Bấm nhầm rồi đúng không?",
+    "Xe chở đầy tim rồi nè, thương lại đi mà…",
+    "Nút đó hỏng rồi, bấm nút vàng nha.",
+    "Anh chạy theo tới sáng luôn đó.",
+    "Thôi mà, cười một cái đi."
+  ]
+};
+
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const $ = id => document.getElementById(id);
+const scene = $("scene"), stage = $("stage"), van = $("van");
+
+/* Co giãn sân khấu theo bề rộng màn hình */
+function fit(){
+  const vw = document.documentElement.clientWidth;
+  const s = Math.min(1, vw / 820);
+  const w = vw / s;
+  scene.style.setProperty("--s", s);
+  stage.style.setProperty("--w", w + "px");
+  stage.style.width = w + "px";
+}
+fit(); addEventListener("resize", fit);
+
+/* Sao trên trời */
+(function stars(){
+  const sky = document.querySelector(".sky");
+  const n = innerWidth < 600 ? 50 : 100;
+  for (let i = 0; i < n; i++){
+    const s = document.createElement("i");
+    s.className = "star";
+    const size = Math.random() < .15 ? 3 : 2;
+    s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*62}%;width:${size}px;height:${size}px;--t:${3+Math.random()*4}s;--d:${-Math.random()*6}s`;
+    sky.appendChild(s);
+  }
+})();
+
+/* Trái tim bay lên từ nóc xe */
+const colors = ["#fe1239","#ff5c8a","#ff8fab","#ffb3c6"];
+function heart(burst){
+  const vanX = stage.offsetWidth / 2 - 250;
+  const h = document.createElement("div");
+  h.className = "heart";
+  const dx = burst ? (Math.random()*600 - 300) : (Math.random()*160 - 120);
+  const dy = burst ? -(260 + Math.random()*260) : -(220 + Math.random()*160);
+  h.style.cssText =
+    `left:${vanX + 110 + Math.random()*160}px;bottom:${240 + Math.random()*20}px;` +
+    `--dx:${dx}px;--dy:${dy}px;--sc:${.5 + Math.random()*.6};--rot:${Math.random()*60-30}deg;` +
+    `--dur:${burst ? 2.2 + Math.random()*1.5 : 4 + Math.random()*2}s;--c:${colors[Math.random()*colors.length|0]}`;
+  h.innerHTML = '<div class="love"><span class="c1"></span><span class="c2"></span><span class="sq"></span></div>';
+  stage.appendChild(h);
+  h.addEventListener("animationend", () => h.remove());
+}
+if (!reduce) setTimeout(() => setInterval(() => heart(false), 900), 2400);
+
+/* Nút "Chưa" chạy trốn */
+const noBtn = $("no"), sub = $("sub");
+let tries = 0;
+function dodge(e){
+  if (noBtn.dataset.done) return;
+  e && e.preventDefault();
+  sub.textContent = CONFIG.noLines[tries % CONFIG.noLines.length];
+  tries++;
+  if (tries >= 6){
+    noBtn.dataset.done = "1";
+    noBtn.textContent = "Hết rồi mà";
+    noBtn.classList.remove("runaway");
+    noBtn.style.left = noBtn.style.top = "";
+    noBtn.className = "btn btn-yes";
+    return;
+  }
+  const r = noBtn.getBoundingClientRect();
+  if (!noBtn.classList.contains("runaway")){
+    noBtn.style.left = r.left + "px"; noBtn.style.top = r.top + "px";
+    noBtn.classList.add("runaway");
+    noBtn.offsetWidth;
+  }
+  const pad = 16;
+  const maxX = innerWidth - r.width - pad, maxY = innerHeight * .7 - r.height;
+  let x, y;
+  do { x = pad + Math.random()*(maxX - pad); y = pad + Math.random()*(maxY - pad); }
+  while (Math.hypot(x - r.left, y - r.top) < 140);
+  noBtn.style.left = x + "px"; noBtn.style.top = y + "px";
+}
+noBtn.addEventListener("pointerenter", e => { if (e.pointerType === "mouse") dodge(); });
+noBtn.addEventListener("click", e => { noBtn.dataset.done ? accept() : dodge(e); });
+
+/* Lá thư */
+const dlg = $("letter");
+function buildLetter(){
+  let i = 0;
+  const esc = s => s.replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+  let html = `<div class="to reveal" id="letterTo" style="--i:${i++}">${esc(CONFIG.to)}</div>`;
+  CONFIG.intro.forEach(p => html += `<p class="reveal" style="--i:${i++}">${esc(p)}</p>`);
+  html += `<div class="poem">` + CONFIG.poem.map(l => `<span class="reveal" style="--i:${i++}">${esc(l)}</span>`).join("") + `</div>`;
+  html += `<p class="reveal" style="--i:${i++}">${esc(CONFIG.outro)}</p>`;
+  html += `<div class="sign reveal" style="--i:${i++}">${esc(CONFIG.signature)}</div>`;
+  html += `<button class="close" id="closeLetter">Đóng thư</button>`;
+  $("letterBody").innerHTML = html;
+  $("closeLetter").onclick = () => dlg.close();
+}
+buildLetter();
+function openLetter(){
+  dlg.classList.remove("show");
+  dlg.showModal();
+  requestAnimationFrame(() => requestAnimationFrame(() => dlg.classList.add("show")));
+}
+dlg.addEventListener("click", e => { if (e.target === dlg) dlg.close(); });
+
+/* Đồng ý */
+let accepted = false;
+function accept(){
+  if (!accepted){
+    accepted = true;
+    $("title").textContent = CONFIG.afterTitle;
+    sub.textContent = CONFIG.afterSub;
+    const actions = $("actions");
+    actions.innerHTML = '<button class="btn btn-yes" id="reopen">Đọc lại thư</button>';
+    $("reopen").onclick = openLetter;
+    van.classList.add("hop"); setTimeout(() => van.classList.remove("hop"), 1100);
+    if (!reduce) for (let k = 0; k < 28; k++) setTimeout(() => heart(true), k * 45);
+    setTimeout(openLetter, reduce ? 0 : 1300);
+  } else openLetter();
+}
+$("yes").addEventListener("click", accept);
+</script>
+</body>
+</html>
